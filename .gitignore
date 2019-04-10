@@ -80,7 +80,7 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
-# .
+# Solr
 /eclipse-build
 /maven-build
 /classes
