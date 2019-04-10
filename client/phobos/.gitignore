@@ -41,3 +41,70 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+*.swp
+*.*~
+project.lock.json
+.DS_Store
+*.pyc
+nupkg/
+
+# Visual Studio Code
+.vscode
+
+# Rider
+.idea
+
+# User-specific files
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+build/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+msbuild.log
+msbuild.err
+msbuild.wrn
+
+# Visual Studio 2015
+.vs/
+
+# .
+/eclipse-build
+/maven-build
+/classes
+build
+/idea-build
+dist
+lib
+test-lib
+/*~
+/velocity.log
+/build.properties
+/.idea
+lucene/**/*.iml
+parent.iml
+*.ipr
+*.iws
+/.project
+/.classpath
+/.settings
+/.caches
+/prj.el
+/bin
+/bin.*
+pom.xml
+/nbproject
+/nb-build
+.pydevproject
