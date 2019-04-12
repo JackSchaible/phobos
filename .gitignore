@@ -87,7 +87,6 @@ msbuild.wrn
 /classes
 build
 /idea-build
-lib
 test-lib
 /*~
 /velocity.log
