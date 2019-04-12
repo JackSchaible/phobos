@@ -10,8 +10,7 @@ Ensure the following are installed:
 - Ensure java 1.8+ is installed (open a new command prompt and type "java -version", if installed, it should show the version of java installed on your system)
   - If not, go to https://www.oracle.com/technetwork/java/javase/downloads/jre8-downloads-2133155.html to download the latest java release for windows
 - Ensure the JAVA_HOME environment variable is set, and points to your java installation
-- Open a command prompt in ther /solr directory, and run "bin\solr.cmd start -e cloud"
-  - At the prompts, press enter (if one of the ports is used, enter a new port), until you see the message "SolrCloud example running, please visit: http://localhost:8983/solr"
+- Open a command prompt in ther /solr directory, and run "bin\solr.cmd start"
   - Allow solr access through windows firewall, if applicable
 
 ## Step 2 - Client Application (Angular 7.3)

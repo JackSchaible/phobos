@@ -27,11 +27,11 @@ namespace server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSolrNet($"{Configuration["SolrUrl"]}/solr");
-            services.AddSolrNet<SolrMovie>($"{Configuration["SolrUrl"]}/solr/movies");
+            services.AddSolrNet<Movie>($"{Configuration["SolrUrl"]}/solr/movies");
             services.AddAutoMapper();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
-            services.AddSingleton<IMovieService, MoviesService>(s => new MoviesService(serviceProvider.GetService<ILogger<MoviesService>>(), serviceProvider.GetService<ISolrOperations<SolrMovie>>(), _hostingEnvironment.ContentRootPath, serviceProvider.GetService<IMapper>()));
+            services.AddSingleton<IMovieService, MoviesService>(s => new MoviesService(serviceProvider.GetService<ILogger<MoviesService>>(), serviceProvider.GetService<ISolrOperations<Movie>>(), _hostingEnvironment.ContentRootPath, serviceProvider.GetService<IMapper>()));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

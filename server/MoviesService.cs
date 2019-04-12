@@ -14,12 +14,12 @@ namespace server
     //Can probably implement a caching mechanism to improve performance
     public class MoviesService : IMovieService
     {
-        private readonly ISolrOperations<SolrMovie> _solr;
+        private readonly ISolrOperations<Movie> _solr;
         private readonly string _appBasePath;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
 
-        public MoviesService(ILogger<MoviesService> logger, ISolrOperations<SolrMovie> solr, string appBasePath, IMapper mapper)
+        public MoviesService(ILogger<MoviesService> logger, ISolrOperations<Movie> solr, string appBasePath, IMapper mapper)
         {
             _solr = solr;
             _appBasePath = appBasePath;
@@ -35,7 +35,7 @@ namespace server
             if (hasRecords) return;
 
             //Populate the dataset with the csv data
-            List<MovieViewModel> movies;
+            List<Movie> movies;
             string filepath = Path.Combine(_appBasePath, "data", "movies_metadata.csv");
 
             //Load csv, add movies
@@ -44,11 +44,11 @@ namespace server
                 {
                     csv.Configuration.RegisterClassMap<MovieCsvMapper>();
                     csv.Configuration.MissingFieldFound = null;
-                    movies = csv.GetRecords<MovieViewModel>().ToList();
+                    movies = csv.GetRecords<Movie>().ToList();
                 }
 
             //Send to solr
-            ResponseHeader addResult = _solr.AddRange(movies.Select(x => _mapper.Map<SolrMovie>(x)));
+            ResponseHeader addResult = _solr.AddRange(movies);
             ResponseHeader commitResult = _solr.Commit();
 
             //Something went wrong
@@ -73,10 +73,10 @@ namespace server
             }
         }
 
-        public List<MovieViewModel> GetAll()
+        public List<Movie> GetAll()
         {
-            return _solr.Query(new SolrQuery("*:*"), new QueryOptions() { Rows = 100 })
-                .Select(x => _mapper.Map<MovieViewModel>(x))
+            return _solr
+                .Query(new SolrQuery("*:*"), new QueryOptions() { Rows = 100 })
                 .ToList();
         }
     }

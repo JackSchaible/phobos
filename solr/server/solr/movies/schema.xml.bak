@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema name="movie-schema" version="1.6">
+    <uniqueKey>id</uniqueKey>
+
+    <fieldType name="pdate" class="solr.DatePointField" docValues="true" indexed="true" />
+    <fieldType name="pint" class="solr.IntPointField" docValues="true"/>
+    <fieldType name="plong" class="solr.LongPointField" docValues="true"/>
+    <fieldType name="string" class="solr.StrField" sortMissingLast="true"/>
+
+    <field name="id" type="string" multiValued="false" indexed="true" required="true" stored="true"/>
+    <field name="original_title" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="overview" type="string" multiValued="false" indexed="true" stored="true"/>
+    <field name="release_date" type="pdate" multiValued="false" indexed="true" stored="true"/>
+    <field name="budget" type="pint" multiValued="false" indexed="true" stored="true"/>
+    <field name="revenue" type="plong" multiValued="false" indexed="true" stored="true"/>
+    <field name="runtime" type="pint" multiValued="false" indexed="true" stored="true"/>
+    <field name="tagline" type="string" multiValued="false" indexed="true" stored="true"/>
+</schema>

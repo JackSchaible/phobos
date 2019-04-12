@@ -3,7 +3,7 @@ using System;
 
 namespace server.Models
 {
-    public class MovieCsvMapper : ClassMap<MovieViewModel>
+    public class MovieCsvMapper : ClassMap<Movie>
     {
         public MovieCsvMapper()
         {
