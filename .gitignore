@@ -72,7 +72,7 @@ build/
 bld/
 client/**/*/[Bb]in/
 server/**/*/[Bb]in/
-[Oo]bj/
+server/obj/
 [Oo]ut/
 msbuild.log
 msbuild.err
