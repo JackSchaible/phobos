@@ -2,6 +2,7 @@
 using SolrNet;
 using SolrNet.Commands.Parameters;
 using System.Collections.Generic;
+using System.IO;
 
 namespace server
 {
@@ -24,6 +25,12 @@ namespace server
             //Populate the dataset with the csv data
             List<Movie> movies = new List<Movie>();
 
+            using (var reader = new StreamReader(""))
+            {
+
+            }
+
+            //Load csv, add movies, send to solr
         }
     }
 }
