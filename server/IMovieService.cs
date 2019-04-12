@@ -5,6 +5,6 @@ namespace server
 {
     public interface IMovieService
     {
-        List<Movie> GetAll();
+        List<Movie> GetAll(int page);
     }
 }

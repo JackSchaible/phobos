@@ -14,10 +14,14 @@ namespace server
     //Can probably implement a caching mechanism to improve performance
     public class MoviesService : IMovieService
     {
+        //Required DI vars
         private readonly ISolrOperations<Movie> _solr;
         private readonly string _appBasePath;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
+
+        //Settings
+        private const int PageSize = 100;
 
         public MoviesService(ILogger<MoviesService> logger, ISolrOperations<Movie> solr, string appBasePath, IMapper mapper)
         {
@@ -73,10 +77,11 @@ namespace server
             }
         }
 
-        public List<Movie> GetAll()
+        public List<Movie> GetAll(int page)
         {
+            StartOrCursor.Start start = new StartOrCursor.Start(page * PageSize);
             return _solr
-                .Query(new SolrQuery("*:*"), new QueryOptions() { Rows = 100 })
+                .Query(new SolrQuery("*:*"), new QueryOptions() { Rows = PageSize, StartOrCursor = start })
                 .ToList();
         }
     }

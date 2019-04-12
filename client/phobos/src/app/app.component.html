@@ -1,8 +1,18 @@
-<div>
-  <h1>Phobos</h1>
-  <p>Welcome to the Phobos demo search app. Please type your query below.</p>
-</div>
+<app-nav></app-nav>
 
-<div>
-  <input type="text" />
+<div class="container">
+  <div>
+    <h1>Phobos</h1>
+    <p>Welcome to the Phobos movie database app. Begin your search below, or	just browse!</p>
+  </div>
+
+  <div>
+    <input type="text" />
+  </div>
+
+  <ag-grid-angular
+    style="width:500px; height: 500px;"
+    class="ag-theme-balham"
+    [rowData]="rowData"
+    [columnDefs]="columnDefs"></ag-grid-angular>
 </div>

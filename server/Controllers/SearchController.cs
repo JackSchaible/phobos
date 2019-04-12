@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using server.Models;
-using SolrNet;
-using SolrNet.Commands.Parameters;
 
 namespace server.Controllers
 {
@@ -19,15 +17,16 @@ namespace server.Controllers
 
         // GET api/values
         [HttpGet]
-        public ActionResult<string> Get()
+        public ActionResult<List<Movie>> Get(int page)
         {
-            var results = _movies.GetAll();
-            return results.Count.ToString();
+            var results = _movies.GetAll(page);
+            return results;
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        [Route("getMovie")]
+        public ActionResult<string> GetMovie(int id)
         {
             return "value";
         }
