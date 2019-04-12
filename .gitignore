@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-**/dist
+client/**/*/dist
 **/tmp
 **/out-tsc
 
@@ -87,7 +87,6 @@ msbuild.wrn
 /classes
 build
 /idea-build
-dist
 lib
 test-lib
 /*~
