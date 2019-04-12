@@ -107,3 +107,5 @@ pom.xml
 /nbproject
 /nb-build
 .pydevproject
+**/*/logs/
+solr/example/

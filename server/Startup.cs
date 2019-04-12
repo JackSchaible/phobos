@@ -1,18 +1,24 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using server.Models;
 using SolrNet;
+using SolrNet.Mapping;
 
 namespace server
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private IHostingEnvironment _hostingEnvironment;
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            _hostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
@@ -21,14 +27,17 @@ namespace server
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddSolrNet($"{Configuration["SolrUrl"]}/solr");
-            services.AddSolrNet<Product>($"{Configuration["SolrUrl"]}/solr/movies");
-            services.AddSingleton<IMovieService, MoviesService>();
+            services.AddSolrNet<SolrMovie>($"{Configuration["SolrUrl"]}/solr/movies");
+            services.AddAutoMapper();
+
+            ServiceProvider serviceProvider = services.BuildServiceProvider();
+            services.AddSingleton<IMovieService, MoviesService>(s => new MoviesService(serviceProvider.GetService<ILogger<MoviesService>>(), serviceProvider.GetService<ISolrOperations<SolrMovie>>(), _hostingEnvironment.ContentRootPath, serviceProvider.GetService<IMapper>()));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger)
         {
             if (env.IsDevelopment())
             {

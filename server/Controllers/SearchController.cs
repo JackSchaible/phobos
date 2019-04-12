@@ -10,18 +10,18 @@ namespace server.Controllers
     [ApiController]
     public class SearchController : ControllerBase
     {
-        private ISolrOperations<Product> _solr;
+        private IMovieService _movies;
 
-        public SearchController(ISolrOperations<Product> solr)
+        public SearchController(IMovieService movies)
         {
-            _solr = solr;
+            _movies = movies;
         }
 
         // GET api/values
         [HttpGet]
         public ActionResult<string> Get()
         {
-            var results = _solr.Query(new SolrQuery("foundation"), new QueryOptions() { Rows = 100 });
+            var results = _movies.GetAll();
             return results.Count.ToString();
         }
 
