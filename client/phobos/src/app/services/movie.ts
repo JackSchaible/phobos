@@ -1,10 +1,10 @@
 export interface Movie {
-	Id: string;
-	Name: string;
-	Description: string;
-	ReleaseDate: Date;
-	Budget: number;
-	Revenue: number;
-	RuntimeMinutes: number;
-	Tagline: string;
+	id: string;
+	name: string;
+	description: string;
+	releaseDate: Date;
+	budget: number;
+	revenue: number;
+	runtimeMinutes: number;
+	tagline: string;
 }

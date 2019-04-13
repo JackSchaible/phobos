@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CsvHelper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using server.Models;
 using SolrNet;
@@ -82,6 +83,13 @@ namespace server
             StartOrCursor.Start start = new StartOrCursor.Start(page * PageSize);
             return _solr
                 .Query(new SolrQuery("*:*"), new QueryOptions() { Rows = PageSize, StartOrCursor = start })
+                .ToList();
+        }
+
+        public ActionResult<List<Movie>> Search(string term)
+        {
+            return _solr
+                .Query(new SolrQuery(term), new QueryOptions() { Rows = PageSize })
                 .ToList();
         }
     }

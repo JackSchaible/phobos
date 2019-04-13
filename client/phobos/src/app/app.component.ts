@@ -1,31 +1,106 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MovieService } from './services/movie.service';
+import { Movie } from './services/movie';
+import { DatePipe, CurrencyPipe } from '@angular/common';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.scss']
+	styleUrls: ['./app.component.scss'],
+	providers: [DatePipe, CurrencyPipe]
 })
-export class AppComponent {
-	title = 'phobos';
+export class AppComponent implements OnInit {
+	public title = 'phobos';
 
-	columnDefs = [
-		{ headerName: 'ID', field: 'Id' },
-		{ headerName: 'Name', field: 'Name' },
-		{ headerName: 'Description', field: 'Description' },
-		{ headerName: 'Release Date', field: 'ReleaseDate' },
-		{ headerName: 'Budget', field: 'Budget' },
-		{ headerName: 'Revenue', field: 'Revenue' },
-		{ headerName: 'Runtime', field: 'RuntimeMinutes' },
-		{ headerName: 'Tagline', field: 'Tagline' }
+	public columnDefs = [
+		// { headerName: 'ID', field: 'id', sortable: true, filter: true },
+		{ headerName: 'Name', field: 'name', sortable: true, filter: true },
+		{
+			headerName: 'Tagline',
+			field: 'tagline',
+			sortable: true,
+			filter: true
+		},
+		{
+			headerName: 'Release Date',
+			field: 'releaseDate',
+			sortable: true,
+			filter: true
+		},
+		{ headerName: 'Budget', field: 'budget', sortable: true, filter: true },
+		{
+			headerName: 'Revenue',
+			field: 'revenue',
+			sortable: true,
+			filter: true
+		},
+		{
+			headerName: 'Runtime',
+			field: 'runtimeMinutes',
+			sortable: true,
+			filter: true
+		}
 	];
 
-	//get from service
-	rowData = [];
+	public rowData: any;
 
-	constructor(private movieService: MovieService) {
-		this.movieService.GetAll().subscribe(movies => {
-			this.rowData = movies;
+	constructor(
+		private movieService: MovieService,
+		private datePipe: DatePipe,
+		private currencyPipe: CurrencyPipe
+	) {
+		this.rowData = this.movieService.GetAll();
+		// this.movieService.GetAll().subscribe(movies => {
+		// 	const movieModels = [];
+		// 	movies.forEach(movie => {
+		// 		movieModels.push(this.processMovie(movie));
+		// 	});
+		// 	this.rowData = movieModels;
+		// });
+	}
+
+	public ngOnInit(): void {
+		this.movieService.GetAll().subscribe(results => {
+			this.rowData = this.processResults(results);
 		});
 	}
+
+	private processResults(results: Array<Movie>): Array<MovieViewModel> {
+		const movies = [];
+		results.forEach(result => {
+			movies.push(this.processMovie(result));
+		});
+
+		return movies;
+	}
+
+	private processMovie(movie: Movie): MovieViewModel {
+		return new MovieViewModel(
+			movie.id,
+			movie.name,
+			this.datePipe.transform(movie.releaseDate, 'mediumDate'),
+			this.currencyPipe.transform(movie.budget, 'CAD'),
+			this.currencyPipe.transform(movie.revenue, 'CAD'),
+			`${movie.runtimeMinutes} min.`,
+			movie.tagline
+		);
+	}
+
+	public onSearch(searchTerm: string): void {
+		this.movieService.Search(searchTerm).subscribe(results => {
+			this.rowData = this.processResults(results);
+		});
+	}
+}
+
+class MovieViewModel {
+	constructor(
+		public id: string,
+		public name: string,
+		public releaseDate: string,
+		public budget: string,
+		public revenue: string,
+		public runtimeMinutes: string,
+		public tagline: string
+	) {}
 }

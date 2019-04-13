@@ -31,6 +31,13 @@ namespace server.Controllers
             return "value";
         }
 
+        [HttpGet("{search}")]
+        [Route("search")]
+        public ActionResult<List<Movie>> Search(string term)
+        {
+            return _movies.Search(term);
+        }
+
         // POST api/values
         [HttpPost]
         public void Post([FromBody] string value)

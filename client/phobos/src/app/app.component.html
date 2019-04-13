@@ -1,18 +1,10 @@
-<app-nav></app-nav>
+<app-nav (search)="onSearch($event)"></app-nav>
 
 <div class="container">
-  <div>
+  <div class="mt-3">
     <h1>Phobos</h1>
     <p>Welcome to the Phobos movie database app. Begin your search below, or	just browse!</p>
   </div>
 
-  <div>
-    <input type="text" />
-  </div>
-
-  <ag-grid-angular
-    style="width:500px; height: 500px;"
-    class="ag-theme-balham"
-    [rowData]="rowData"
-    [columnDefs]="columnDefs"></ag-grid-angular>
+  <ag-grid-angular class="ag-theme-bootstrap" [rowData]="rowData" [columnDefs]="columnDefs"></ag-grid-angular>
 </div>
