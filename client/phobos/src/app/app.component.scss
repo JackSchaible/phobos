@@ -7,3 +7,19 @@ span.ag-header-cell-text {
 	font-weight: 600;
 	color: #bbb;
 }
+
+span.badge {
+	cursor: pointer;
+}
+
+span:not(:nth-last-child(2)) {
+	span.or {
+		display: none;
+	}
+}
+
+span:last-child {
+	span.comma {
+		display: none;
+	}
+}

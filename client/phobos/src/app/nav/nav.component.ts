@@ -7,9 +7,6 @@ import { Router, NavigationEnd } from '@angular/router';
 	styleUrls: ['./nav.component.scss']
 })
 export class NavComponent implements OnInit {
-	@Output()
-	public search: EventEmitter<string> = new EventEmitter<string>();
-
 	public isHome: boolean;
 	public isNew: boolean;
 	public isAbout: boolean;
@@ -40,9 +37,5 @@ export class NavComponent implements OnInit {
 				}
 			}
 		});
-	}
-
-	public onSearch(searchTerm): void {
-		this.search.emit(searchTerm);
 	}
 }

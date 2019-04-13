@@ -21,4 +21,12 @@ export class SearchComponent implements OnInit {
 	public onSearch(): void {
 		this.search.emit(this.searchControl.value);
 	}
+
+	public onKeydown(event: KeyboardEvent): void {
+		if (event.key === 'Enter') this.onSearch();
+	}
+
+	public setSearch(term: string): void {
+		this.searchControl.setValue(term);
+	}
 }

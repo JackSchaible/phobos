@@ -1,7 +1,15 @@
-import { Component, OnInit } from '@angular/core';
+import {
+	Component,
+	OnInit,
+	Output,
+	EventEmitter,
+	ViewChild
+} from '@angular/core';
 import { MovieService } from './services/movie.service';
-import { Movie } from './services/movie';
+import { Movie } from './models/movie';
 import { DatePipe, CurrencyPipe } from '@angular/common';
+import MovieViewModel from './models/movieViewModel';
+import { SearchComponent } from './search/search.component';
 
 @Component({
 	selector: 'app-root',
@@ -41,15 +49,21 @@ export class AppComponent implements OnInit {
 			filter: true
 		}
 	];
-
 	public rowData: any;
+
+	public searchTerm: string;
+
+	public suggestions: Array<string> = Array<string>();
+
+	@ViewChild(SearchComponent)
+	public searchComponent: SearchComponent;
 
 	constructor(
 		private movieService: MovieService,
 		private datePipe: DatePipe,
 		private currencyPipe: CurrencyPipe
 	) {
-		this.rowData = this.movieService.GetAll();
+		// this.rowData = this.movieService.GetAll();
 		// this.movieService.GetAll().subscribe(movies => {
 		// 	const movieModels = [];
 		// 	movies.forEach(movie => {
@@ -87,20 +101,22 @@ export class AppComponent implements OnInit {
 	}
 
 	public onSearch(searchTerm: string): void {
+		this.suggestions = [];
 		this.movieService.Search(searchTerm).subscribe(results => {
-			this.rowData = this.processResults(results);
+			this.rowData = this.processResults(results.movies);
+
+			if (
+				results.spellChecking.length === 0 ||
+				results.spellChecking[0].suggestions.length === 0
+			)
+				return;
+
+			this.suggestions = results.spellChecking[0].suggestions;
 		});
 	}
-}
 
-class MovieViewModel {
-	constructor(
-		public id: string,
-		public name: string,
-		public releaseDate: string,
-		public budget: string,
-		public revenue: string,
-		public runtimeMinutes: string,
-		public tagline: string
-	) {}
+	public suggestionClicked(suggestion: string): void {
+		this.searchComponent.setSearch(suggestion);
+		this.onSearch(suggestion);
+	}
 }

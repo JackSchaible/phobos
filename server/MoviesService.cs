@@ -55,27 +55,17 @@ namespace server
             //Send to solr
             ResponseHeader addResult = _solr.AddRange(movies);
             ResponseHeader commitResult = _solr.Commit();
+            ResponseHeader spellCheckResult = _solr.BuildSpellCheckDictionary();
 
             //Something went wrong
             if (addResult.Status != 0)
-            {
-                string errMsg = $"Solr add operation failed with code {addResult.Status}";
-                _logger.LogCritical(errMsg);
-                foreach(KeyValuePair<string, string> param in addResult.Params)
-                    _logger.LogTrace($"{param.Key}: {param.Value}");
-
-                throw new Exception(errMsg);
-            }
+                HandleError(addResult, "add");
 
             if (commitResult.Status != 0)
-            {
-                string errMsg = $"Solr add operation failed with code {commitResult.Status}";
-                _logger.LogCritical(errMsg);
-                foreach (KeyValuePair<string, string> param in commitResult.Params)
-                    _logger.LogTrace($"{param.Key}: {param.Value}");
+                HandleError(commitResult, "commit");
 
-                throw new Exception(errMsg);
-            }
+            if (spellCheckResult.Status != 0)
+                HandleError(spellCheckResult, "build spellcheck library");
         }
 
         public List<Movie> GetAll(int page)
@@ -86,11 +76,31 @@ namespace server
                 .ToList();
         }
 
-        public ActionResult<List<Movie>> Search(string term)
+        public ActionResult<MovieResult> Search(string term)
         {
-            return _solr
-                .Query(new SolrQuery(term), new QueryOptions() { Rows = PageSize })
-                .ToList();
+            SpellCheckingParameters spellcheck = new SpellCheckingParameters
+            {
+                Collate = true,
+            };
+
+            SolrQueryResults<Movie> results = _solr
+                .Query(new SolrQuery(term), new QueryOptions() { Rows = PageSize, SpellCheck = spellcheck });
+
+            return new MovieResult
+            {
+                Movies = results.ToList(),
+                SpellChecking = results.SpellChecking.ToList()
+            };
+        }
+
+        private void HandleError(ResponseHeader header, string operationName)
+        {
+            string errMsg = $"Solr {operationName} operation failed with code {header.Status}";
+            _logger.LogCritical(errMsg);
+            foreach (KeyValuePair<string, string> param in header.Params)
+                _logger.LogTrace($"{param.Key}: {param.Value}");
+
+            throw new Exception(errMsg);
         }
     }
 }

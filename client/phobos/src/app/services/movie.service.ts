@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Movie } from './movie';
-import { HttpClient, HttpUrlEncodingCodec } from '@angular/common/http';
+import { Movie } from '../models/movie';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import MovieResult from '../models/movieResult';
 
 @Injectable({
 	providedIn: 'root'
 })
 export class MovieService {
 	private url = 'https://localhost:44394/api/search';
+	private lastSearch = '*:*';
 
 	constructor(private http: HttpClient) {}
 
@@ -21,10 +23,14 @@ export class MovieService {
 	/**
 	 * Search
 	 */
-	public Search(term: string): Observable<Array<Movie>> {
-		if (!term) return;
+	public Search(term: string): Observable<MovieResult> {
+		if (!term) term = '*:*';
 
-		return this.http.get<Array<Movie>>(
+		// prevent multiple hits to the server
+		if (term === this.lastSearch) return;
+		this.lastSearch = term;
+
+		return this.http.get<MovieResult>(
 			`${this.url}/search?term=${encodeURIComponent(term)}`
 		);
 	}

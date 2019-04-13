@@ -33,7 +33,7 @@ namespace server.Controllers
 
         [HttpGet("{search}")]
         [Route("search")]
-        public ActionResult<List<Movie>> Search(string term)
+        public ActionResult<MovieResult> Search(string term)
         {
             return _movies.Search(term);
         }
