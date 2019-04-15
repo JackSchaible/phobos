@@ -1,14 +1,11 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
 using server.Models;
 using SolrNet;
-using SolrNet.Mapping;
 
 namespace server
 {
@@ -28,10 +25,9 @@ namespace server
         {
             services.AddSolrNet($"{Configuration["SolrUrl"]}/solr");
             services.AddSolrNet<Movie>($"{Configuration["SolrUrl"]}/solr/movies");
-            services.AddAutoMapper();
 
             ServiceProvider serviceProvider = services.BuildServiceProvider();
-            services.AddSingleton<IMovieService, MoviesService>(s => new MoviesService(serviceProvider.GetService<ILogger<MoviesService>>(), serviceProvider.GetService<ISolrOperations<Movie>>(), _hostingEnvironment.ContentRootPath, serviceProvider.GetService<IMapper>()));
+            services.AddSingleton<IMovieService, MoviesService>(s => new MoviesService(serviceProvider.GetService<ILogger<MoviesService>>(), serviceProvider.GetService<ISolrOperations<Movie>>(), _hostingEnvironment.ContentRootPath));
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 

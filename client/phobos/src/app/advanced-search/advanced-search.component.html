@@ -1,0 +1,43 @@
+<div class="border p-2 d-flex flex-wrap">
+  <div class="form-group w-50">
+      <label for="name">Name <input class="ml-2" type="checkbox" [(ngModel)]="model.useName" /></label>
+      <input *ngIf="model.useName" type="text" class="form-control" id="name" placeholder="Enter the name of the movie" [(ngModel)]="model.name">
+  </div>
+
+  <div class="form-group w-50">
+      <label for="name">Release Date <input class="ml-2" type="checkbox" [(ngModel)]="model.useDate" /> </label>
+      
+      <div class="d-flex" *ngIf="model.useDate">
+        <div>
+          <p>Release Date: <strong>{{model.date | date: "mediumDate"}}</strong></p>
+        </div>
+
+        <div class="px-3">
+          <button class="btn btn-primary" type="button" (click)="toggleShowDatePicker()">
+            <i class="fas fa-calendar"></i>
+          </button>
+        </div>
+
+        <div *ngIf="showDatePicker">
+          <ngb-datepicker [ngModel]="defaultDate" (select)="dateSelected($event)" #d [minDate]="{year: 1900, month: 1, day: 1}" [maxDate]="{year: 2020, month: 12, day: 16}"></ngb-datepicker>
+        </div>
+      </div>
+
+      <div *ngIf="model.useDate">
+        <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="dateOption" id="inlineRadio1" value="<" [(ngModel)]="model.dateOption">
+            <label class="form-check-label" for="inlineRadio1">Before</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="dateOption" id="inlineRadio2" value=">" [(ngModel)]="model.dateOption">
+            <label class="form-check-label" for="inlineRadio2">After</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" name="dateOption" id="inlineRadio3" value="=" [(ngModel)]="model.dateOption">
+            <label class="form-check-label" for="inlineRadio3">On</label>
+          </div>
+      </div>
+  </div>
+
+  <button type="button" class="btn btn-primary" (click)="search()">Search <i class="fas fa-search"></i></button>
+</div>

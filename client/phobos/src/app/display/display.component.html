@@ -1,0 +1,28 @@
+<div *ngIf="error" class="my-3 text-center">
+  <h1><i class="fas fa-exclamation-square"></i> Error!</h1>
+  <p class="mt-3 mb-1">It seems we don't have that movie in our database. Sorry!</p>
+  <p><a href="/"><i class="fas fa-arrow-left"></i> Go Back</a> to search for another movie!</p>
+</div>
+
+<div *ngIf="!error && movie">
+  <div class="title">
+    <div class="my-3">
+      <h1>{{ movie.name }}</h1>
+      <p><em>{{ movie.tagline }}</em></p>
+      <p>{{movie.description}}</p>
+    </div>
+  </div>
+
+  <div class="details">
+    <p><strong>Release Date:</strong> {{movie.releaseDate | date: 'fullDate'}}</p>
+    <p><strong>Budget:</strong> {{movie.budget === 0 ? 'N/A' : movie.budget | currency: 'CAD'}}</p>
+    <p>
+      <strong>Revenue:</strong> {{movie.revenue === 0 ? 'N/A' : movie.revenue | currency: 'CAD'}} <br />
+      <span [class.text-success]="movie.profit > 100" [class.text-danger]="movie.profit < 100" *ngIf="movie.profit">
+        <i class="fas" [class.fa-arrow-up]="movie.profit > 100" [class.fa-arrow-down]="movie.profit < 100"></i>
+        {{movie.profit}}%
+      </span> 
+    </p>
+    <p><strong>Runtime:</strong> {{movie.runtime}}</p>
+  </div>
+</div>

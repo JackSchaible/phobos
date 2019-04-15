@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using CsvHelper;
-using Microsoft.AspNetCore.Mvc;
+﻿using CsvHelper;
 using Microsoft.Extensions.Logging;
 using server.Models;
 using SolrNet;
@@ -19,20 +17,23 @@ namespace server
         private readonly ISolrOperations<Movie> _solr;
         private readonly string _appBasePath;
         private readonly ILogger _logger;
-        private readonly IMapper _mapper;
 
         //Settings
         private const int PageSize = 100;
+        private static readonly SpellCheckingParameters Spellcheck = new SpellCheckingParameters
+        {
+            Collate = true,
+        };
 
-        public MoviesService(ILogger<MoviesService> logger, ISolrOperations<Movie> solr, string appBasePath, IMapper mapper)
+        public MoviesService(ILogger<MoviesService> logger, ISolrOperations<Movie> solr, string appBasePath)
         {
             _solr = solr;
             _appBasePath = appBasePath;
             _logger = logger;
-            _mapper = mapper;
 
             Initialize();
         }
+
         private void Initialize()
         {
             //See if there are movies in the solr dataset
@@ -72,25 +73,54 @@ namespace server
         {
             StartOrCursor.Start start = new StartOrCursor.Start(page * PageSize);
             return _solr
-                .Query(new SolrQuery("*:*"), new QueryOptions() { Rows = PageSize, StartOrCursor = start })
+                .Query(SolrQuery.All, new QueryOptions() { Rows = PageSize, StartOrCursor = start })
                 .ToList();
         }
 
-        public ActionResult<MovieResult> Search(string term)
+        public MovieResult Search(string term)
         {
-            SpellCheckingParameters spellcheck = new SpellCheckingParameters
-            {
-                Collate = true,
-            };
-
             SolrQueryResults<Movie> results = _solr
-                .Query(new SolrQuery(term), new QueryOptions() { Rows = PageSize, SpellCheck = spellcheck });
+                .Query(new SolrQuery($"{term}*"), new QueryOptions() { Rows = PageSize, SpellCheck = Spellcheck });
 
-            return new MovieResult
+            var result =  new MovieResult
             {
                 Movies = results.ToList(),
-                SpellChecking = results.SpellChecking.ToList()
+                SpellChecking = results.SpellChecking.ToList(),
             };
+
+            return result;
+        }
+
+        public MovieResult GetById(string id)
+        {
+            SolrQueryResults<Movie> results = _solr
+                .Query(new SolrQuery($"id:{id}"), new QueryOptions() { Rows = PageSize });
+
+            var result = new MovieResult
+            {
+                Movies = results.ToList(),
+            };
+
+            return result;
+        }
+
+        public MovieResult AdvancedSearch(AdvancedSearch model)
+        {
+            FacetParameters parameters = new FacetParameters();
+            if (model.UseDate)
+            {
+                //parameters.Queries.Add(new SolrFacetDateQuery(""));
+            }
+
+            SolrQueryResults<Movie> results = _solr
+                .Query(SolrQuery.All, new QueryOptions() { Rows = PageSize, Facet = parameters });
+
+            var result = new MovieResult
+            {
+                Movies = results.ToList(),
+            };
+
+            return result;
         }
 
         private void HandleError(ResponseHeader header, string operationName)

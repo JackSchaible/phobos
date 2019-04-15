@@ -21,15 +21,15 @@ Ensure the following are installed:
 
 ## Basic Features:
 
-- The website should load and index some randomly generated or selected test data.
-- Your test data can be anything you want but should be at least several thousand records.
-- The app should allow the user to enter keywords and find your indexed content.
-- Your app should also feature a responsive design to ensure it renders well for a variety of screen sizes and resolutions.
+- [x] The website should load and index some randomly generated or selected test data.
+- [x] Your test data can be anything you want but should be at least several thousand records.
+- [x] The app should allow the user to enter keywords and find your indexed content.
+- [x] Your app should also feature a responsive design to ensure it renders well for a variety of screen sizes and resolutions.
 
 ## Advanced Features:
 
-- Stemming should be used – for example, when searching for “engineer”, the search should also return results for “engineering”, -“engineers”, and “engineered”.
-- Spell checking should present corrected search terms for user misspellings.
-- Related search terms could be displayed when a user has searched, suggesting alternate keywords related to what they’ve already searched for.
-- Auto-complete should suggest search terms as the user types in the search box.
-- Attach meta-data to your indexed records and provide faceting options for the user to filter by.
+- [x] Stemming should be used – for example, when searching for “engineer”, the search should also return results for “engineering”, -“engineers”, and “engineered”.
+- [x] Spell checking should present corrected search terms for user misspellings.
+- [ ] Related search terms could be displayed when a user has searched, suggesting alternate keywords related to what they’ve already searched for.
+- [ ] Auto-complete should suggest search terms as the user types in the search box.
+- [ ] Attach meta-data to your indexed records and provide faceting options for the user to filter by.

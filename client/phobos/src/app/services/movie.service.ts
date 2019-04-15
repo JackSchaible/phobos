@@ -3,6 +3,7 @@ import { Movie } from '../models/movie';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import MovieResult from '../models/movieResult';
+import AdvancedSearchModel from '../models/advancedSearch';
 
 @Injectable({
 	providedIn: 'root'
@@ -16,22 +17,35 @@ export class MovieService {
 	/**
 	 * GetAll
 	 */
-	public GetAll(): Observable<Array<Movie>> {
+	public getAll(): Observable<Array<Movie>> {
 		return this.http.get<Array<Movie>>(`${this.url}?page=0`);
 	}
 
 	/**
 	 * Search
 	 */
-	public Search(term: string): Observable<MovieResult> {
+	public search(term: string): Observable<MovieResult> {
 		if (!term) term = '*:*';
 
 		// prevent multiple hits to the server
-		if (term === this.lastSearch) return;
-		this.lastSearch = term;
+		// if (term === this.lastSearch) return;
+		// this.lastSearch = term;
 
 		return this.http.get<MovieResult>(
 			`${this.url}/search?term=${encodeURIComponent(term)}`
 		);
+	}
+
+	/**
+	 * GetById
+	 */
+	public getById(id: string) {
+		if (!id) return;
+
+		return this.http.get<MovieResult>(`${this.url}/getById?id=${id}`);
+	}
+
+	public advancedSearch(model: AdvancedSearchModel): Observable<MovieResult> {
+		return this.http.post<MovieResult>(`${this.url}`, model);
 	}
 }
