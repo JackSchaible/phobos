@@ -21,6 +21,9 @@ export class MainComponent implements OnInit {
 	public isTablet: boolean;
 	public isPhone: boolean;
 
+	public error: boolean;
+	public loading: boolean;
+
 	@ViewChild(SearchComponent)
 	public searchComponent: SearchComponent;
 
@@ -28,12 +31,21 @@ export class MainComponent implements OnInit {
 		private movieService: MovieService,
 		private router: Router,
 		private media: MatchMediaService
-	) {}
+	) {
+		this.loading = true;
+	}
 
 	public ngOnInit(): void {
-		this.movieService.getAll().subscribe(results => {
-			this.rowData = results;
-		});
+		const me = this;
+		this.movieService.getAll().subscribe(
+			results => {
+				this.rowData = results;
+				this.loading = false;
+			},
+			() => {
+				me.error = true;
+			}
+		);
 
 		this.media.onChange().subscribe(mediaType => {
 			this.setMedia(mediaType);
@@ -70,10 +82,6 @@ export class MainComponent implements OnInit {
 		this.advanced = !this.advanced;
 	}
 
-	public onAdvancedSearch(searchModel: AdvancedSearchModel): void {
-		console.log(searchModel);
-	}
-
 	public getProfit(budget: number, revenue: number): number {
 		let profit = 0;
 		if (revenue && budget) profit = Math.round((revenue / budget) * 100);
@@ -98,7 +106,5 @@ export class MainComponent implements OnInit {
 				this.isTablet = false;
 				break;
 		}
-
-		console.log(media);
 	}
 }

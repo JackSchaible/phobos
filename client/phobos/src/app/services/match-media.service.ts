@@ -1,6 +1,12 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 
+export enum Media {
+	Phone,
+	Tablet,
+	Desktop
+}
+
 @Injectable({
 	providedIn: 'root'
 })
@@ -15,7 +21,6 @@ export class MatchMediaService {
 	}
 
 	public onresize(event: any) {
-		console.log(event);
 		this.subject.next(this.getMedia(event.target.innerWidth));
 	}
 
@@ -24,18 +29,12 @@ export class MatchMediaService {
 	}
 
 	private getMedia(width: number): Media {
-		let media: Media;
+		let mediaType: Media;
 
-		if (width <= 425) media = Media.Phone;
-		else if (width <= 768) media = Media.Tablet;
-		else media = Media.Desktop;
+		if (width <= 425) mediaType = Media.Phone;
+		else if (width <= 768) mediaType = Media.Tablet;
+		else mediaType = Media.Desktop;
 
-		return media;
+		return mediaType;
 	}
-}
-
-export enum Media {
-	Phone,
-	Tablet,
-	Desktop
 }

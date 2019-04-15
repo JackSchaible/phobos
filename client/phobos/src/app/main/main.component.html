@@ -1,4 +1,20 @@
-<div class="mt-3">
+<div class="mt-3" *ngIf="loading && !error">
+  <h1>Phobos</h1>
+  <p>Please wait while we load data from the Phobos server.</p>
+
+  <div class="text-center">
+    <i class="fas fa-popcorn fa-spin fa-2x"></i>
+    <p>Loading...</p>
+  </div>
+</div>
+
+<div *ngIf="error" class="mt-3">
+  <h1>Phobos</h1>
+  <p><i class="fas fa-exclamation-triangle text-danger"></i> There seems to be trouble connecting to the Phobos Server.</p>
+</div>
+
+<div class="mt-3" *ngIf="!loading && !error">
+  <div>
     <h1>Phobos</h1>
     <p>Welcome to the Phobos movie database app. Begin your search below, or	just browse!</p>
   </div>
@@ -9,14 +25,6 @@
     <div class="my-1" *ngIf="suggestions.length > 0">
       <p><em>Did you mean: <span *ngFor="let suggestion of suggestions" (click)="suggestionClicked(suggestion)"><span class="mx-2 badge badge-secondary">{{suggestion}}</span><span class="comma">,</span><span class="or"> or</span></span>?</em></p>
     </div>
-
-    <!--div class="my-1">
-      <a href="#" (click)="toggleAdvanced()"><em>Advanced Search</em></a>
-
-      <div class="my-2" *ngIf="advanced">
-        <app-advanced-search (searching)="onAdvancedSearch($event)"></app-advanced-search>
-      </div>
-    </div-->
   </div>
 
   <div class="table-div">
@@ -87,3 +95,4 @@
       </mat-accordion>
     </div>
   </div>
+</div>
