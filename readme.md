@@ -43,6 +43,16 @@ Ensure the following are installed:
   - If you see a warning about not being able to target the .NET Core 2.2 framework, ensure .NET Core 2.2 is installed, and that you're using the latest release of visual studio 2017, or visual studio 2019
 - Press the run button (F5)
 
+## Features:
+
+- CSV file (server/data/movies.csv) contains a list of 45,383 movies dated from 1900-2020
+- App will check the solr server on first request for records, if no records are found, it uploads the entire list to solr
+- Default search will search over all fields
+- App is responsive, and works well on desktop, tablet (768px), and mobile (425px), and should work in all display resolutions in between
+- Search uses stemming, so "Toy Story" will bring up Toy Story 2, Toy Story 3, and other toy-related movies
+- Any misspelling in the search should bring up a list of alternatives
+  - Clicking on the alternative will enter it into the search field, and search for it
+
 ## Assignment Overview:
 
 ## Basic Features:

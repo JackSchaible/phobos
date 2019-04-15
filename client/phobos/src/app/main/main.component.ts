@@ -23,6 +23,7 @@ export class MainComponent implements OnInit {
 
 	public error: boolean;
 	public loading: boolean;
+	public errorMessage: string;
 
 	@ViewChild(SearchComponent)
 	public searchComponent: SearchComponent;
@@ -53,6 +54,13 @@ export class MainComponent implements OnInit {
 	}
 
 	public onSearch(searchTerm: string): void {
+		this.errorMessage = null;
+		if (searchTerm.indexOf(':') > -1) {
+			this.errorMessage =
+				'Searches may not contain colons (":"). Please retype your query and try again.';
+			return;
+		}
+
 		this.suggestions = new Array<string>();
 		this.movieService.search(searchTerm).subscribe(results => {
 			this.rowData = results.movies;

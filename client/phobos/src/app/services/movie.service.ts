@@ -25,11 +25,11 @@ export class MovieService {
 	 * Search
 	 */
 	public search(term: string): Observable<MovieResult> {
-		if (!term) term = '*:*';
+		if (this.isNullOrWhitespace(term)) term = '*:*';
 
 		// prevent multiple hits to the server
-		// if (term === this.lastSearch) return;
-		// this.lastSearch = term;
+		if (term === this.lastSearch) return;
+		this.lastSearch = term;
 
 		return this.http.get<MovieResult>(
 			`${this.url}/search?term=${encodeURIComponent(term)}`
@@ -47,5 +47,10 @@ export class MovieService {
 
 	public advancedSearch(model: AdvancedSearchModel): Observable<MovieResult> {
 		return this.http.post<MovieResult>(`${this.url}`, model);
+	}
+
+	private isNullOrWhitespace(input: string): boolean {
+		if (typeof input === 'undefined' || input == null) return true;
+		return input.replace(/\s/g, '').length < 1;
 	}
 }

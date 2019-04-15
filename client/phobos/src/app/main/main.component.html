@@ -27,6 +27,10 @@
     </div>
   </div>
 
+  <div class="my-2" *ngIf="errorMessage">
+    <p><i class="fas fa-exclamation-triangle text-danger"></i> Error: {{errorMessage}}</p>
+  </div>
+
   <div class="table-div">
     <table class="table table-hover" *ngIf="!isPhone">
       <thead>
